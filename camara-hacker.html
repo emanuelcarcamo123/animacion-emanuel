@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SECURITY TERMINAL</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,body{
+    width:100%;
+    min-height:100%;
+    background:#020000;
+    color:#ff3030;
+    font-family:"Courier New",monospace;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:
+        radial-gradient(circle at center,#280000 0%,#080000 42%,#000 80%);
+}
+
+.scanlines{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:20;
+    background:repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,.025) 0px,
+        rgba(255,255,255,.025) 1px,
+        transparent 2px,
+        transparent 5px
+    );
+}
+
+.panel{
+    width:100%;
+    max-width:700px;
+    border:1px solid #870000;
+    background:rgba(5,0,0,.96);
+    box-shadow:
+        0 0 30px rgba(255,0,0,.25),
+        inset 0 0 50px rgba(120,0,0,.12);
+    overflow:hidden;
+}
+
+.header{
+    height:50px;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    padding:0 16px;
+    border-bottom:1px solid #5d0000;
+    color:#ff4040;
+    font-size:11px;
+    letter-spacing:2px;
+}
+
+.dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:#ff2020;
+    box-shadow:0 0 12px #ff0000;
+}
+
+.content{
+    padding:25px;
+    text-align:center;
+}
+
+.logo{
+    font-size:clamp(28px,8vw,52px);
+    font-weight:bold;
+    letter-spacing:4px;
+    color:#ff2020;
+    text-shadow:
+        0 0 10px #ff0000,
+        0 0 35px #ff0000;
+    animation:glitch 1.2s infinite;
+}
+
+.subtitle{
+    margin-top:12px;
+    color:#9b4545;
+    font-size:11px;
+    letter-spacing:2px;
+}
+
+.status{
+    margin:25px 0 15px;
+    padding:12px;
+    border:1px solid #4d0000;
+    background:#090000;
+    text-align:left;
+    font-size:12px;
+    line-height:1.7;
+}
+
+.red{
+    color:#ff3030;
+}
+
+.white{
+    color:#ddd;
+}
+
+.dim{
+    color:#783030;
+}
+
+button{
+    width:100%;
+    max-width:340px;
+    padding:16px;
+    margin-top:12px;
+    background:#160000;
+    border:1px solid #ff2020;
+    color:#ff4040;
+    font-family:inherit;
+    font-weight:bold;
+    letter-spacing:2px;
+    cursor:pointer;
+    box-shadow:
+        0 0 15px rgba(255,0,0,.3),
+        inset 0 0 15px rgba(255,0,0,.05);
+}
+
+button:hover{
+    background:#ff2020;
+    color:#000;
+    box-shadow:
+        0 0 25px #ff0000,
+        0 0 60px rgba(255,0,0,.5);
+}
+
+.cameraBox{
+    display:none;
+    margin-top:25px;
+    border:1px solid #9b0000;
+    background:#000;
+    padding:8px;
+    box-shadow:0 0 25px rgba(255,0,0,.3);
+}
+
+.cameraBox.active{
+    display:block;
+    animation:appear .7s forwards;
+}
+
+video{
+    width:100%;
+    display:block;
+    background:#000;
+    transform:scaleX(-1);
+}
+
+.cameraStatus{
+    padding:10px;
+    font-size:11px;
+    color:#ff4040;
+    letter-spacing:1px;
+}
+
+.prank{
+    display:none;
+    margin-top:25px;
+    padding:25px 15px;
+    border:1px solid #ff2020;
+    background:#090000;
+}
+
+.prank.active{
+    display:block;
+    animation:appear .8s forwards;
+}
+
+.prank h2{
+    font-size:clamp(25px,7vw,45px);
+    color:#ff2020;
+    text-shadow:0 0 20px #ff0000;
+}
+
+.prank p{
+    margin-top:15px;
+    color:white;
+    line-height:1.6;
+}
+
+.small{
+    margin-top:15px;
+    color:#8d3b3b;
+    font-size:10px;
+}
+
+.stop{
+    margin-top:15px;
+    max-width:220px;
+    padding:10px;
+}
+
+@keyframes appear{
+    from{
+        opacity:0;
+        transform:translateY(15px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes glitch{
+    0%,100%{transform:translate(0)}
+    20%{transform:translate(-1px,1px)}
+    40%{transform:translate(1px,-1px)}
+    60%{transform:translate(-1px,-1px)}
+    80%{transform:translate(1px,1px)}
+}
+
+@media(max-width:500px){
+    body{
+        padding:10px;
+    }
+
+    .content{
+        padding:18px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="scanlines"></div>
+
+<div class="panel">
+
+    <div class="header">
+        <span class="dot"></span>
+        SECURITY TERMINAL // CAMERA
+    </div>
+
+    <div class="content">
+
+        <div class="logo">
+            CAMERA ACCESS
+        </div>
+
+        <div class="subtitle">
+            SECURE VISUAL INTERFACE
+        </div>
+
+        <div class="status">
+
+            <div class="red">
+                &gt; CAMERA MODULE DETECTED
+            </div>
+
+            <div class="dim">
+                &gt; STATUS: WAITING FOR USER PERMISSION
+            </div>
+
+            <div class="white">
+                &gt; NO IMAGE WILL BE UPLOADED OR SAVED
+            </div>
+
+        </div>
+
+        <button id="activate">
+            ⚠ ACTIVAR CÁMARA
+        </button>
+
+        <div id="cameraBox" class="cameraBox">
+
+            <video
+                id="video"
+                autoplay
+                playsinline>
+            </video>
+
+            <div class="cameraStatus">
+                ● CAMERA ACTIVE — LOCAL PREVIEW ONLY
+            </div>
+
+            <button id="stop" class="stop">
+                DETENER CÁMARA
+            </button>
+
+        </div>
+
+        <div id="prank" class="prank">
+
+            <h2>
+                😂 TE LA CREÍSTE
+            </h2>
+
+            <p>
+                No hackeamos nada.<br>
+                Solo queríamos verte la cara. 💀
+            </p>
+
+            <div class="small">
+                EMANUEL.OS // BROMA COMPLETADA
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const activate =
+    document.getElementById("activate");
+
+const stop =
+    document.getElementById("stop");
+
+const video =
+    document.getElementById("video");
+
+const cameraBox =
+    document.getElementById("cameraBox");
+
+const prank =
+    document.getElementById("prank");
+
+let stream = null;
+
+activate.addEventListener("click", async () => {
+
+    try{
+
+        stream = await navigator.mediaDevices.getUserMedia({
+            video:true,
+            audio:false
+        });
+
+        video.srcObject = stream;
+
+        cameraBox.classList.add("active");
+
+        activate.style.display = "none";
+
+        setTimeout(() => {
+            prank.classList.add("active");
+        },1800);
+
+    }catch(error){
+
+        activate.textContent =
+            "PERMISO NO CONCEDIDO";
+
+        activate.style.borderColor =
+            "#660000";
+
+        console.log(error);
+
+    }
+
+});
+
+stop.addEventListener("click", () => {
+
+    if(stream){
+
+        stream.getTracks().forEach(track => {
+            track.stop();
+        });
+
+    }
+
+    video.srcObject = null;
+
+    cameraBox.classList.remove("active");
+
+    prank.classList.remove("active");
+
+    activate.style.display = "block";
+
+    activate.textContent =
+        "⚠ ACTIVAR CÁMARA";
+
+});
+
+</script>
+
+</body>
+</html>
