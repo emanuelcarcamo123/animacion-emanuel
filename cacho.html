@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Cacho - Saray</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    min-height: 100%;
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #050505;
+    color: white;
+}
+
+body {
+    position: relative;
+}
+
+/* ===== FONDO ===== */
+
+.background {
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at 50% 50%, rgba(255, 0, 55, .16), transparent 28%),
+        radial-gradient(circle at 20% 80%, rgba(120, 0, 255, .10), transparent 25%),
+        radial-gradient(circle at 80% 20%, rgba(255, 0, 80, .10), transparent 25%),
+        #050505;
+    z-index: -5;
+}
+
+.noise {
+    position: fixed;
+    inset: 0;
+    opacity: .08;
+    pointer-events: none;
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(255,255,255,.04) 3px
+        );
+    z-index: 20;
+}
+
+/* ===== ESTRELLAS ===== */
+
+.stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -2;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    opacity: .5;
+    animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle {
+    from { opacity: .15; transform: scale(.6); }
+    to { opacity: .9; transform: scale(1.5); }
+}
+
+/* ===== ESCENA ===== */
+
+.scene {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 25px;
+    position: relative;
+}
+
+.content {
+    width: min(700px, 100%);
+    position: relative;
+    z-index: 5;
+}
+
+/* ===== TEXTOS ===== */
+
+.small {
+    color: #ff4b73;
+    font-size: 12px;
+    letter-spacing: 5px;
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+}
+
+h1 {
+    font-size: clamp(45px, 13vw, 100px);
+    line-height: .9;
+    letter-spacing: 5px;
+    font-weight: 900;
+    text-shadow:
+        0 0 10px rgba(255,0,70,.8),
+        0 0 30px rgba(255,0,70,.5),
+        0 0 70px rgba(255,0,70,.25);
+}
+
+.red {
+    color: #ff174f;
+}
+
+.subtitle {
+    margin-top: 25px;
+    font-size: clamp(17px, 4vw, 25px);
+    color: #ddd;
+    line-height: 1.5;
+}
+
+.quote {
+    margin-top: 25px;
+    color: #ff9aae;
+    font-size: clamp(15px, 3.5vw, 21px);
+    font-style: italic;
+}
+
+/* ===== CORAZÓN ===== */
+
+.heart-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.heart {
+    width: 75px;
+    height: 75px;
+    background: #ff174f;
+    transform: rotate(-45deg);
+    position: relative;
+    filter:
+        drop-shadow(0 0 10px #ff174f)
+        drop-shadow(0 0 35px rgba(255,23,79,.7));
+    animation: heartbeat 1.2s infinite;
+}
+
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    width: 75px;
+    height: 75px;
+    background: #ff174f;
+    border-radius: 50%;
+}
+
+.heart::before {
+    top: -37px;
+    left: 0;
+}
+
+.heart::after {
+    left: 37px;
+    top: 0;
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: rotate(-45deg) scale(1); }
+    10% { transform: rotate(-45deg) scale(1.15); }
+    20% { transform: rotate(-45deg) scale(1); }
+    30% { transform: rotate(-45deg) scale(1.12); }
+    40% { transform: rotate(-45deg) scale(1); }
+}
+
+/* ===== ANILLOS ===== */
+
+.ring {
+    position: absolute;
+    width: 170px;
+    height: 170px;
+    border: 1px solid rgba(255, 23, 79, .45);
+    border-radius: 50%;
+    animation: ringPulse 2s infinite;
+}
+
+.ring:nth-child(2) {
+    width: 210px;
+    height: 210px;
+    animation-delay: .4s;
+}
+
+.ring:nth-child(3) {
+    width: 260px;
+    height: 260px;
+    animation-delay: .8s;
+}
+
+@keyframes ringPulse {
+    0% {
+        opacity: 0;
+        transform: scale(.7);
+    }
+    50% {
+        opacity: .8;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.2);
+    }
+}
+
+/* ===== BOTÓN ===== */
+
+button {
+    margin-top: 35px;
+    padding: 16px 28px;
+    border: 1px solid #ff174f;
+    border-radius: 12px;
+    background: rgba(255, 23, 79, .08);
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    box-shadow:
+        0 0 15px rgba(255,23,79,.25),
+        inset 0 0 15px rgba(255,23,79,.08);
+    transition: .3s;
+}
+
+button:hover {
+    background: #ff174f;
+    box-shadow:
+        0 0 25px rgba(255,23,79,.7),
+        0 0 60px rgba(255,23,79,.3);
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(.95);
+}
+
+/* ===== PANTALLAS ===== */
+
+.screen {
+    display: none;
+}
+
+.screen.active {
+    display: block;
+}
+
+/* ===== FRASES ===== */
+
+.phrase {
+    min-height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(22px, 6vw, 42px);
+    font-weight: bold;
+    line-height: 1.25;
+    text-shadow: 0 0 20px rgba(255,23,79,.5);
+}
+
+/* ===== ALERTA ===== */
+
+.warning {
+    margin: 20px auto;
+    padding: 15px;
+    max-width: 500px;
+    border: 1px solid rgba(255,23,79,.5);
+    background: rgba(255,23,79,.05);
+    border-radius: 10px;
+    color: #ffb4c3;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+/* ===== FLASH ===== */
+
+.flash {
+    position: fixed;
+    inset: 0;
+    background: white;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 50;
+}
+
+.flash.active {
+    animation: flash .55s ease;
+}
+
+@keyframes flash {
+    0% { opacity: 0; }
+    15% { opacity: .9; }
+    100% { opacity: 0; }
+}
+
+/* ===== AURA ===== */
+
+.aura {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(
+        circle,
+        rgba(255, 23, 79, .35),
+        rgba(255, 0, 60, .08) 45%,
+        transparent 70%
+    );
+    filter: blur(10px);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.aura.active {
+    animation: auraPower 2s forwards;
+}
+
+@keyframes auraPower {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(.5);
+    }
+
+    40% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.3);
+    }
+
+    100% {
+        opacity: .55;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* ===== PARTICULAS ===== */
+
+.particle {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    background: #ff174f;
+    border-radius: 50%;
+    pointer-events: none;
+    box-shadow: 0 0 10px #ff174f;
+    animation: particleMove 1.5s linear forwards;
+    z-index: 10;
+}
+
+@keyframes particleMove {
+    from {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+
+    to {
+        transform: translate(
+            var(--x),
+            var(--y)
+        ) scale(0);
+        opacity: 0;
+    }
+}
+
+/* ===== FINAL ===== */
+
+.final-title {
+    font-size: clamp(45px, 14vw, 110px);
+    font-weight: 900;
+    color: #ff174f;
+    letter-spacing: 6px;
+    text-shadow:
+        0 0 10px #ff174f,
+        0 0 30px #ff174f,
+        0 0 70px rgba(255,23,79,.5);
+}
+
+.final-sub {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #eee;
+}
+
+.final-small {
+    margin-top: 30px;
+    color: #ff8da5;
+    font-size: 13px;
+    letter-spacing: 3px;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 500px) {
+    .scene {
+        padding: 20px;
+    }
+
+    .heart-container {
+        margin-bottom: 15px;
+        transform: scale(.8);
+    }
+
+    button {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .warning {
+        font-size: 13px;
+    }
+}
+
+/* ===== FADE ===== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade {
+    animation: fadeIn 1s forwards;
+}
+</style>
+</head>
+
+<body>
+
+<div class="background"></div>
+<div class="noise"></div>
+<div class="stars" id="stars"></div>
+<div class="flash" id="flash"></div>
+
+<div class="scene">
+
+    <!-- PANTALLA 1 -->
+    <div class="content screen active" id="screen1">
+
+        <div class="small">
+            ARCHIVO CONFIDENCIAL
+        </div>
+
+        <div class="heart-container">
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="heart"></div>
+        </div>
+
+        <h1>
+            EL <span class="red">CACHO</span>
+        </h1>
+
+        <div class="subtitle">
+            Dicen que es malo...
+            <br>
+            pero alguien decidió estudiarlo.
+        </div>
+
+        <div class="quote">
+            “Porque aparentemente también es parte de la relación.”
+        </div>
+
+        <button onclick="startStory()">
+            💔 DESBLOQUEAR VERDAD
+        </button>
+
+    </div>
+
+
+    <!-- PANTALLA 2 -->
+    <div class="content screen" id="screen2">
+
+        <div class="small">
+            FASE 01 / CONOCIMIENTO
+        </div>
+
+        <div class="phrase" id="phrase">
+            Todo comienza con confianza...
+        </div>
+
+        <div class="warning">
+            ⚠️ Sistema sentimental funcionando con normalidad.
+        </div>
+
+    </div>
+
+
+    <!-- PANTALLA 3 -->
+    <div class="content screen" id="screen3">
+
+        <div class="small">
+            FASE 02 / SOSPECHA
+        </div>
+
+        <div class="phrase" id="phrase2">
+            Hasta que aparece ese...
+        </div>
+
+        <div class="aura" id="aura"></div>
+
+    </div>
+
+
+    <!-- PANTALLA 4 -->
+    <div class="content screen" id="screen4">
+
+        <div class="small">
+            FASE 03 / LA REVELACIÓN
+        </div>
+
+        <div class="phrase">
+            😐
+            <br>
+            ¿Y ESE QUIÉN ES?
+        </div>
+
+        <div class="warning">
+            ⚠️ Se ha detectado una anomalía en la relación.
+        </div>
+
+    </div>
+
+
+    <!-- PANTALLA 5 -->
+    <div class="content screen" id="screen5">
+
+        <div class="small">
+            FASE 04 / CONCLUSIÓN
+        </div>
+
+        <div class="phrase">
+            “El cacho es parte de la relación.”
+        </div>
+
+        <div class="quote">
+            — Saray, probablemente 😭
+        </div>
+
+    </div>
+
+
+    <!-- PANTALLA 6 -->
+    <div class="content screen" id="screen6">
+
+        <div class="small">
+            SISTEMA SENTIMENTAL
+        </div>
+
+        <div class="phrase">
+            Amor ❤️
+            <br><br>
+            Confianza 🤝
+            <br><br>
+            Cacho 💀
+        </div>
+
+        <button onclick="finalAwakening()">
+            ⚡ ACEPTAR DESTINO
+        </button>
+
+    </div>
+
+
+    <!-- FINAL -->
+    <div class="content screen" id="final">
+
+        <div class="small">
+            SISTEMA ACTUALIZADO
+        </div>
+
+        <div class="final-title">
+            SARAY
+        </div>
+
+        <div class="final-sub">
+            NUEVO NIVEL DESBLOQUEADO
+        </div>
+
+        <div class="quote">
+            “Amar es confiar...
+            <br>
+            pero aparentemente también es sobrevivir al cacho.” 😂
+        </div>
+
+        <div class="final-small">
+            NO SE GARANTIZA LA ESTABILIDAD EMOCIONAL.
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+/* =====================================
+   ESTRELLAS
+===================================== */
+
+const stars = document.getElementById("stars");
+
+for (let i = 0; i < 100; i++) {
+
+    const star = document.createElement("div");
+
+    star.className = "star";
+
+    star.style.left = Math.random() * 100 + "%";
+    star.style.top = Math.random() * 100 + "%";
+
+    star.style.animationDelay =
+        Math.random() * 3 + "s";
+
+    star.style.animationDuration =
+        (1 + Math.random() * 3) + "s";
+
+    stars.appendChild(star);
+}
+
+
+/* =====================================
+   CAMBIAR PANTALLA
+===================================== */
+
+function showScreen(id) {
+
+    document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+    });
+
+    document.getElementById(id).classList.add("active");
+}
+
+
+/* =====================================
+   FLASH
+===================================== */
+
+function flash() {
+
+    const f = document.getElementById("flash");
+
+    f.classList.remove("active");
+
+    void f.offsetWidth;
+
+    f.classList.add("active");
+}
+
+
+/* =====================================
+   PARTICULAS
+===================================== */
+
+function particles(amount = 40) {
+
+    for (let i = 0; i < amount; i++) {
+
+        const p = document.createElement("div");
+
+        p.className = "particle";
+
+        p.style.left = "50%";
+        p.style.top = "50%";
+
+        const x =
+            (Math.random() - .5) * window.innerWidth * 1.5;
+
+        const y =
+            (Math.random() - .5) * window.innerHeight * 1.5;
+
+        p.style.setProperty("--x", x + "px");
+        p.style.setProperty("--y", y + "px");
+
+        p.style.animationDuration =
+            (.8 + Math.random() * 1.5) + "s";
+
+        document.body.appendChild(p);
+
+        setTimeout(() => {
+            p.remove();
+        }, 2500);
+    }
+}
+
+
+/* =====================================
+   HISTORIA
+===================================== */
+
+function startStory() {
+
+    flash();
+
+    particles(30);
+
+    setTimeout(() => {
+
+        showScreen("screen2");
+
+    }, 600);
+
+
+    setTimeout(() => {
+
+        showScreen("screen3");
+
+        const aura =
+            document.getElementById("aura");
+
+        aura.classList.add("active");
+
+        particles(40);
+
+    }, 3000);
+
+
+    setTimeout(() => {
+
+        flash();
+
+        showScreen("screen4");
+
+        particles(60);
+
+    }, 6000);
+
+
+    setTimeout(() => {
+
+        showScreen("screen5");
+
+    }, 9000);
+
+
+    setTimeout(() => {
+
+        showScreen("screen6");
+
+    }, 12000);
+
+}
+
+
+/* =====================================
+   FINAL
+===================================== */
+
+function finalAwakening() {
+
+    flash();
+
+    particles(120);
+
+    document.body.style.background = "#080006";
+
+    setTimeout(() => {
+
+        showScreen("final");
+
+    }, 700);
+
+}
+
+
+/* =====================================
+   EFECTO EXTRA AL TOCAR
+===================================== */
+
+document.addEventListener("click", function(e) {
+
+    if (e.target.tagName === "BUTTON") return;
+
+    const p = document.createElement("div");
+
+    p.className = "particle";
+
+    p.style.left = e.clientX + "px";
+    p.style.top = e.clientY + "px";
+
+    p.style.setProperty(
+        "--x",
+        ((Math.random() - .5) * 150) + "px"
+    );
+
+    p.style.setProperty(
+        "--y",
+        ((Math.random() - .5) * 150) + "px"
+    );
+
+    document.body.appendChild(p);
+
+    setTimeout(() => p.remove(), 1500);
+
+});
+
+</script>
+
+</body>
+</html>
