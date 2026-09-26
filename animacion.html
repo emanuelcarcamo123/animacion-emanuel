@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EMANUEL — Despertar</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#000;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+#scene{
+    position:relative;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:
+        radial-gradient(circle at center,
+        #07182b 0%,
+        #020711 35%,
+        #000 75%);
+}
+
+/* ESTRELLAS */
+
+.star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    border-radius:50%;
+    background:#65c7ff;
+    box-shadow:0 0 8px #168cff;
+    opacity:0;
+}
+
+/* CONTENEDOR */
+
+.center{
+    position:absolute;
+    inset:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+}
+
+/* FRASES */
+
+.quote{
+    position:absolute;
+
+    width:88%;
+
+    text-align:center;
+
+    color:#fff;
+
+    font-size:clamp(18px,5vw,31px);
+
+    font-weight:700;
+
+    line-height:1.4;
+
+    letter-spacing:.5px;
+
+    opacity:0;
+
+    transform:
+        translateY(25px)
+        scale(.92);
+
+    text-shadow:
+        0 0 8px #168cff,
+        0 0 25px #006eff,
+        0 0 50px #004cff;
+
+    transition:
+        opacity 1s ease,
+        transform 1s ease;
+}
+
+.quote.show{
+    opacity:1;
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+/* NÚCLEO */
+
+.core{
+    position:absolute;
+
+    width:35px;
+    height:35px;
+
+    border-radius:50%;
+
+    background:#69d2ff;
+
+    box-shadow:
+        0 0 20px #fff,
+        0 0 45px #168cff,
+        0 0 90px #006eff;
+
+    opacity:0;
+
+    transform:scale(.1);
+}
+
+/* AURA */
+
+.aura{
+    position:absolute;
+
+    width:280px;
+    height:280px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(circle,
+        rgba(60,190,255,.85) 0%,
+        rgba(0,110,255,.45) 25%,
+        rgba(0,50,255,.15) 50%,
+        transparent 72%);
+
+    filter:blur(7px);
+
+    opacity:0;
+
+    transform:scale(.2);
+}
+
+/* ANILLOS */
+
+.ring{
+    position:absolute;
+
+    width:250px;
+    height:250px;
+
+    border-radius:50%;
+
+    border:2px solid rgba(50,170,255,.5);
+
+    box-shadow:
+        0 0 20px #168cff,
+        inset 0 0 20px rgba(0,110,255,.5);
+
+    opacity:0;
+}
+
+/* NOMBRE */
+
+.name{
+    position:absolute;
+
+    color:#fff;
+
+    font-size:clamp(48px,14vw,105px);
+
+    font-weight:900;
+
+    letter-spacing:9px;
+
+    opacity:0;
+
+    transform:scale(.3);
+
+    text-shadow:
+        0 0 8px #fff,
+        0 0 25px #55c8ff,
+        0 0 60px #168cff,
+        0 0 110px #006eff;
+}
+
+/* FRASE FINAL */
+
+.final{
+    position:absolute;
+
+    width:90%;
+
+    margin-top:155px;
+
+    text-align:center;
+
+    color:#9bdcff;
+
+    font-size:clamp(16px,4.3vw,25px);
+
+    font-weight:700;
+
+    line-height:1.45;
+
+    opacity:0;
+
+    transform:translateY(25px);
+
+    text-shadow:
+        0 0 10px #168cff,
+        0 0 30px #006eff;
+}
+
+/* BOTÓN */
+
+#start{
+    position:absolute;
+
+    bottom:40px;
+
+    z-index:50;
+
+    padding:16px 30px;
+
+    border-radius:40px;
+
+    border:2px solid #168cff;
+
+    background:
+        linear-gradient(
+            180deg,
+            #061a31,
+            #020812
+        );
+
+    color:#fff;
+
+    font-size:16px;
+
+    font-weight:800;
+
+    letter-spacing:2px;
+
+    box-shadow:
+        0 0 15px #168cff,
+        0 0 35px rgba(0,100,255,.35),
+        inset 0 0 20px rgba(0,100,255,.2);
+
+    transition:.2s;
+}
+
+#start:active{
+    transform:scale(.92);
+}
+
+/* FLASH */
+
+.flash{
+    position:absolute;
+
+    inset:0;
+
+    background:#fff;
+
+    opacity:0;
+
+    pointer-events:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="scene">
+
+    <div class="flash" id="flash"></div>
+
+    <div class="center">
+
+        <div class="core" id="core"></div>
+
+        <div class="aura" id="aura"></div>
+
+        <div class="ring" id="ring"></div>
+
+
+        <div class="quote" id="q1">
+            “No necesito permiso para llegar hasta la cima.”
+        </div>
+
+        <div class="quote" id="q2">
+            “Hoy comienza la versión de mí que nadie esperaba.”
+        </div>
+
+        <div class="quote" id="q3">
+            “Si voy a caer, será avanzando.”
+        </div>
+
+        <div class="quote" id="q4">
+            “Mi límite solo existe hasta que decido romperlo.”
+        </div>
+
+        <div class="quote" id="q5">
+            “No vine a demostrar quién soy.
+            Vine a convertirme en quien debo ser.”
+        </div>
+
+        <div class="quote" id="q6">
+            “Lo que viene será más grande
+            que todo lo que dejé atrás.”
+        </div>
+
+
+        <div class="name" id="name">
+            EMANUEL
+        </div>
+
+
+        <div class="final" id="final">
+            “Todavía no soy quien quiero ser…
+            pero ya no soy quien era.”
+        </div>
+
+    </div>
+
+
+    <button id="start">
+        ⚡ DESPERTAR
+    </button>
+
+</div>
+
+
+<script>
+
+const scene =
+    document.getElementById("scene");
+
+const start =
+    document.getElementById("start");
+
+const core =
+    document.getElementById("core");
+
+const aura =
+    document.getElementById("aura");
+
+const ring =
+    document.getElementById("ring");
+
+const name =
+    document.getElementById("name");
+
+const finalText =
+    document.getElementById("final");
+
+const flash =
+    document.getElementById("flash");
+
+
+const quotes = [
+
+    document.getElementById("q1"),
+    document.getElementById("q2"),
+    document.getElementById("q3"),
+    document.getElementById("q4"),
+    document.getElementById("q5"),
+    document.getElementById("q6")
+
+];
+
+
+/* CREAR ESTRELLAS */
+
+for(let i=0;i<130;i++){
+
+    const star =
+        document.createElement("div");
+
+    star.className="star";
+
+    star.style.left =
+        Math.random()*100+"%";
+
+    star.style.top =
+        Math.random()*100+"%";
+
+    star.style.width =
+        (1+Math.random()*3)+"px";
+
+    star.style.height =
+        star.style.width;
+
+    scene.appendChild(star);
+
+}
+
+
+/* ANIMAR ESTRELLAS */
+
+function stars(){
+
+    document
+    .querySelectorAll(".star")
+    .forEach(star=>{
+
+        star.animate(
+
+            [
+
+                {
+                    opacity:0,
+                    transform:
+                        "translateY(100px) scale(.4)"
+                },
+
+                {
+                    opacity:1,
+                    transform:
+                        "translateY(-80px) scale(1.5)"
+                },
+
+                {
+                    opacity:0,
+                    transform:
+                        "translateY(-250px) scale(.2)"
+                }
+
+            ],
+
+            {
+
+                duration:
+                    1400+
+                    Math.random()*2200,
+
+                delay:
+                    Math.random()*1200,
+
+                iterations:
+                    Infinity
+
+            }
+
+        );
+
+    });
+
+}
+
+
+/* MOSTRAR FRASE */
+
+function showQuote(index){
+
+    quotes.forEach(q=>{
+
+        q.classList.remove("show");
+
+    });
+
+    quotes[index]
+        .classList.add("show");
+
+}
+
+
+/* ESPERA */
+
+function wait(ms){
+
+    return new Promise(
+        resolve=>setTimeout(resolve,ms)
+    );
+
+}
+
+
+/* PULSO */
+
+function pulse(){
+
+    aura.animate(
+
+        [
+
+            {
+                transform:"scale(1)",
+                opacity:.65
+            },
+
+            {
+                transform:"scale(1.25)",
+                opacity:1
+            },
+
+            {
+                transform:"scale(1)",
+                opacity:.65
+            }
+
+        ],
+
+        {
+
+            duration:1100,
+
+            iterations:Infinity
+
+        }
+
+    );
+
+}
+
+
+/* DESPERTAR */
+
+async function awaken(){
+
+    start.style.display="none";
+
+    stars();
+
+
+    /* FRASES */
+
+    for(
+        let i=0;
+        i<quotes.length;
+        i++
+    ){
+
+        showQuote(i);
+
+        await wait(2300);
+
+    }
+
+
+    /* LIMPIAR */
+
+    quotes.forEach(q=>{
+
+        q.classList.remove("show");
+
+    });
+
+
+    /* NÚCLEO */
+
+    core.style.opacity=1;
+
+    core.animate(
+
+        [
+
+            {
+                transform:"scale(.1)"
+            },
+
+            {
+                transform:"scale(2)"
+            },
+
+            {
+                transform:"scale(.7)"
+            },
+
+            {
+                transform:"scale(3)"
+            }
+
+        ],
+
+        {
+
+            duration:1800,
+
+            easing:
+                "cubic-bezier(.2,.9,.2,1)"
+
+        }
+
+    );
+
+
+    await wait(1700);
+
+
+    /* FLASH */
+
+    flash.animate(
+
+        [
+
+            {opacity:0},
+
+            {opacity:.9},
+
+            {opacity:0}
+
+        ],
+
+        {
+
+            duration:500
+
+        }
+
+    );
+
+
+    /* ANILLO */
+
+    ring.animate(
+
+        [
+
+            {
+                opacity:0,
+                transform:"scale(.2)"
+            },
+
+            {
+                opacity:1,
+                transform:"scale(1)"
+            },
+
+            {
+                opacity:0,
+                transform:"scale(3)"
+            }
+
+        ],
+
+        {
+
+            duration:1600
+
+        }
+
+    );
+
+
+    /* AURA */
+
+    aura.animate(
+
+        [
+
+            {
+                opacity:0,
+                transform:"scale(.2)"
+            },
+
+            {
+                opacity:1,
+                transform:"scale(1.7)"
+            },
+
+            {
+                opacity:.75,
+                transform:"scale(1)"
+            }
+
+        ],
+
+        {
+
+            duration:1700,
+
+            fill:"forwards",
+
+            easing:"ease-out"
+
+        }
+
+    );
+
+
+    await wait(700);
+
+
+    /* NOMBRE */
+
+    name.animate(
+
+        [
+
+            {
+                opacity:0,
+                transform:"scale(.25)"
+            },
+
+            {
+                opacity:1,
+                transform:"scale(1.2)"
+            },
+
+            {
+                opacity:1,
+                transform:"scale(1)"
+            }
+
+        ],
+
+        {
+
+            duration:1700,
+
+            fill:"forwards",
+
+            easing:
+                "cubic-bezier(.15,1.5,.3,1)"
+
+        }
+
+    );
+
+
+    await wait(1400);
+
+
+    /* FRASE FINAL */
+
+    finalText.animate(
+
+        [
+
+            {
+                opacity:0,
+                transform:
+                    "translateY(25px)"
+            },
+
+            {
+                opacity:1,
+                transform:
+                    "translateY(0)"
+            }
+
+        ],
+
+        {
+
+            duration:1200,
+
+            fill:"forwards",
+
+            easing:"ease-out"
+
+        }
+
+    );
+
+
+    pulse();
+
+}
+
+
+/* BOTÓN */
+
+start.addEventListener(
+    "click",
+    awaken
+);
+
+</script>
+
+</body>
+</html>
