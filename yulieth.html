@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YULIETH // MISIÓN</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#000;
+    font-family:Arial,Helvetica,sans-serif;
+    color:white;
+}
+
+body{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:
+        radial-gradient(circle at center, #071a2e 0%, #02070d 35%, #000 75%);
+}
+
+/* FONDO */
+
+.grid{
+    position:absolute;
+    inset:0;
+    opacity:.22;
+    background:
+        linear-gradient(rgba(0,140,255,.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,140,255,.15) 1px, transparent 1px);
+    background-size:45px 45px;
+    transform:perspective(500px) rotateX(60deg) scale(1.8);
+    transform-origin:center bottom;
+    animation:gridMove 8s linear infinite;
+}
+
+@keyframes gridMove{
+    from{transform:perspective(500px) rotateX(60deg) scale(1.8) translateY(0);}
+    to{transform:perspective(500px) rotateX(60deg) scale(1.8) translateY(45px);}
+}
+
+canvas{
+    position:absolute;
+    inset:0;
+}
+
+/* ESCENA */
+
+.scene{
+    position:relative;
+    z-index:5;
+    width:92%;
+    max-width:480px;
+    text-align:center;
+}
+
+/* SISTEMA */
+
+.system{
+    font-size:11px;
+    letter-spacing:3px;
+    color:#168cff;
+    margin-bottom:25px;
+    opacity:0;
+    animation:appear 1s forwards .5s;
+}
+
+.line{
+    width:100%;
+    height:1px;
+    background:linear-gradient(
+        90deg,
+        transparent,
+        #008cff,
+        transparent
+    );
+    margin:15px 0;
+    opacity:.7;
+}
+
+/* TEXTO */
+
+.status{
+    min-height:25px;
+    font-size:13px;
+    letter-spacing:2px;
+    color:#70bcff;
+    text-transform:uppercase;
+    opacity:0;
+}
+
+.status.show{
+    animation:fadeIn .8s forwards;
+}
+
+.main{
+    margin-top:25px;
+    font-size:clamp(34px,10vw,58px);
+    font-weight:900;
+    letter-spacing:5px;
+    color:white;
+    text-shadow:
+        0 0 8px #008cff,
+        0 0 25px #008cff,
+        0 0 55px rgba(0,140,255,.8);
+    opacity:0;
+    transform:scale(.7);
+}
+
+.main.show{
+    animation:nameReveal 1.2s forwards;
+}
+
+.subtitle{
+    margin-top:18px;
+    color:#8fcfff;
+    font-size:14px;
+    letter-spacing:2px;
+    line-height:1.7;
+    opacity:0;
+}
+
+.subtitle.show{
+    animation:appear 1s forwards;
+}
+
+/* NÚCLEO */
+
+.core{
+    width:85px;
+    height:85px;
+    margin:35px auto;
+    border-radius:50%;
+    border:1px solid #008cff;
+    box-shadow:
+        0 0 15px #008cff,
+        0 0 45px rgba(0,140,255,.8),
+        inset 0 0 25px rgba(0,140,255,.7);
+    position:relative;
+    opacity:0;
+}
+
+.core.show{
+    animation:
+        coreAppear 1s forwards,
+        pulse 1.8s infinite 1s;
+}
+
+.core::before,
+.core::after{
+    content:"";
+    position:absolute;
+    inset:12px;
+    border-radius:50%;
+    border:1px solid rgba(80,190,255,.8);
+}
+
+.core::after{
+    inset:27px;
+    background:#008cff;
+    box-shadow:
+        0 0 15px #008cff,
+        0 0 35px #008cff;
+    border:none;
+}
+
+/* MENSAJE FINAL */
+
+.question{
+    display:none;
+    margin-top:30px;
+}
+
+.question.show{
+    display:block;
+    animation:finalReveal 1.2s forwards;
+}
+
+.question .small{
+    font-size:12px;
+    letter-spacing:4px;
+    color:#168cff;
+    margin-bottom:18px;
+}
+
+.question h1{
+    font-size:clamp(30px,9vw,52px);
+    line-height:1.1;
+    letter-spacing:3px;
+    text-shadow:
+        0 0 10px #008cff,
+        0 0 35px #008cff;
+}
+
+.question p{
+    margin-top:18px;
+    color:#9fd7ff;
+    font-size:15px;
+}
+
+/* BOTÓN */
+
+button{
+    margin-top:32px;
+    padding:15px 25px;
+    border:1px solid #008cff;
+    border-radius:4px;
+    background:rgba(0,100,200,.08);
+    color:white;
+    font-weight:bold;
+    letter-spacing:2px;
+    cursor:pointer;
+    box-shadow:
+        0 0 12px rgba(0,140,255,.5),
+        inset 0 0 15px rgba(0,140,255,.08);
+    transition:.25s;
+}
+
+button:hover{
+    background:#008cff;
+    box-shadow:
+        0 0 25px #008cff,
+        0 0 60px rgba(0,140,255,.7);
+    transform:scale(1.05);
+}
+
+/* FIRMA */
+
+.signature{
+    position:fixed;
+    bottom:15px;
+    left:0;
+    width:100%;
+    text-align:center;
+    font-size:9px;
+    letter-spacing:2px;
+    color:#315b7a;
+}
+
+/* ANIMACIONES */
+
+@keyframes appear{
+    to{
+        opacity:1;
+    }
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes nameReveal{
+    0%{
+        opacity:0;
+        transform:scale(.5);
+        filter:blur(15px);
+    }
+    60%{
+        opacity:1;
+        transform:scale(1.08);
+        filter:blur(0);
+    }
+    100%{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+@keyframes coreAppear{
+    from{
+        opacity:0;
+        transform:scale(0);
+    }
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+@keyframes pulse{
+    0%,100%{
+        box-shadow:
+            0 0 15px #008cff,
+            0 0 45px rgba(0,140,255,.7);
+    }
+    50%{
+        box-shadow:
+            0 0 30px #008cff,
+            0 0 90px rgba(0,140,255,1);
+    }
+}
+
+@keyframes finalReveal{
+    from{
+        opacity:0;
+        transform:translateY(30px) scale(.9);
+        filter:blur(8px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+        filter:blur(0);
+    }
+}
+
+/* FLASH */
+
+.flash{
+    position:fixed;
+    inset:0;
+    background:white;
+    opacity:0;
+    pointer-events:none;
+    z-index:20;
+}
+
+.flash.active{
+    animation:flash .5s ease-out;
+}
+
+@keyframes flash{
+    0%{opacity:0;}
+    15%{opacity:.9;}
+    100%{opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="grid"></div>
+
+<canvas id="particles"></canvas>
+
+<div class="scene">
+
+    <div class="system">
+        YULIETH_PROTOCOL // 001
+    </div>
+
+    <div class="line"></div>
+
+    <div id="status" class="status">
+        INICIANDO PROTOCOLO...
+    </div>
+
+    <div id="core" class="core"></div>
+
+    <div id="name" class="main">
+        YULIETH
+    </div>
+
+    <div id="subtitle" class="subtitle">
+        ANALIZANDO ACTIVIDAD ACADÉMICA...<br>
+        DETECTANDO SOBRECARGA DE TRABAJOS...
+    </div>
+
+    <div id="question" class="question">
+
+        <div class="small">
+            MISIÓN COMPLETADA
+        </div>
+
+        <h1>
+            ¿CÓMO TE FUE,<br>
+            YULIETH?
+        </h1>
+
+        <p>
+            Después de tantos trabajos,<br>
+            trasnochos y parciales... 👀
+        </p>
+
+        <button onclick="liberar()">
+            ⚡ VER MENSAJE
+        </button>
+
+    </div>
+
+</div>
+
+<div class="signature">
+    EMANUEL.OS // PROGRAMADOR EN ENTRENAMIENTO
+</div>
+
+<div id="flash" class="flash"></div>
+
+<script>
+
+/* =========================
+   PARTÍCULAS
+========================= */
+
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+let particles = [];
+
+function resize(){
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+}
+
+resize();
+window.addEventListener("resize",resize);
+
+for(let i=0;i<120;i++){
+
+    particles.push({
+        x:Math.random()*innerWidth,
+        y:Math.random()*innerHeight,
+        size:Math.random()*2+0.5,
+        speed:Math.random()*0.5+0.1,
+        alpha:Math.random()
+    });
+
+}
+
+function animate(){
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    particles.forEach(p=>{
+
+        p.y -= p.speed;
+
+        if(p.y < 0){
+            p.y = canvas.height;
+            p.x = Math.random()*canvas.width;
+        }
+
+        ctx.beginPath();
+
+        ctx.fillStyle =
+            `rgba(0,150,255,${p.alpha})`;
+
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = "#008cff";
+
+        ctx.arc(
+            p.x,
+            p.y,
+            p.size,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+    });
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+
+/* =========================
+   SECUENCIA
+========================= */
+
+const status = document.getElementById("status");
+const core = document.getElementById("core");
+const name = document.getElementById("name");
+const subtitle = document.getElementById("subtitle");
+const question = document.getElementById("question");
+
+const messages = [
+
+    "INICIANDO PROTOCOLO...",
+    "BUSCANDO INFORMACIÓN...",
+    "ANALIZANDO SEMANA ACADÉMICA...",
+    "DETECTANDO MÚLTIPLES TRABAJOS...",
+    "DETECTANDO TRASNOCHOS...",
+    "NIVEL DE SUPERVIVENCIA: EXTREMO",
+    "RESULTADO: YULIETH SIGUE EN PIE"
+];
+
+let index = 0;
+
+function nextMessage(){
+
+    if(index < messages.length){
+
+        status.classList.remove("show");
+
+        setTimeout(()=>{
+
+            status.textContent = messages[index];
+
+            status.classList.add("show");
+
+            index++;
+
+        },300);
+
+        setTimeout(nextMessage,1100);
+
+    }else{
+
+        reveal();
+
+    }
+}
+
+function reveal(){
+
+    setTimeout(()=>{
+
+        core.classList.add("show");
+
+    },300);
+
+    setTimeout(()=>{
+
+        name.classList.add("show");
+
+    },1100);
+
+    setTimeout(()=>{
+
+        subtitle.classList.add("show");
+
+    },2100);
+
+    setTimeout(()=>{
+
+        question.classList.add("show");
+
+    },3900);
+}
+
+setTimeout(nextMessage,1000);
+
+
+/* =========================
+   MENSAJE FINAL
+========================= */
+
+function liberar(){
+
+    const flash = document.getElementById("flash");
+
+    flash.classList.add("active");
+
+    setTimeout(()=>{
+
+        flash.classList.remove("active");
+
+        question.innerHTML = `
+
+            <div class="small">
+                MENSAJE DEL PROGRAMADOR
+            </div>
+
+            <h1>
+                JAJAJA<br>
+                SOLO QUERÍA<br>
+                SABER CÓMO TE FUE 😂
+            </h1>
+
+            <p>
+                Pero ya que llegaste hasta aquí...<br>
+                espero que sí hayas sobrevivido 😌
+            </p>
+
+        `;
+
+    },250);
+
+}
+
+</script>
+
+</body>
+</html>
